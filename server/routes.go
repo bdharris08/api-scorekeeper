@@ -23,5 +23,9 @@ func (s *Server) routes() {
 	s.router.Route("/scores/{scoreType}", func(r chi.Router) {
 		r.Use(s.ScoreCtx)
 		r.Post("/", s.HandleAddAction())
+
+		r.Route("/average", func(r chi.Router) {
+			r.Get("/", s.HandleGetStats())
+		})
 	})
 }
