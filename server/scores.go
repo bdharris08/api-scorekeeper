@@ -26,7 +26,7 @@ func (s *Server) HandleAddAction() http.HandlerFunc {
 		fmt.Println(r.Body)
 
 		// validate the incoming json body
-		body := make(map[string]any, 2)
+		body := make(map[string]interface{}, 2)
 		err := json.NewDecoder(r.Body).Decode(&body)
 		if err != nil {
 			render.Render(w, r, ErrInternalServer(fmt.Errorf("reading request body: %w", err)))
