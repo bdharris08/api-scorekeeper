@@ -12,7 +12,6 @@ func (s *Server) routes() {
 	s.router.Use(middleware.RealIP)
 	s.router.Use(middleware.Logger)
 	s.router.Use(middleware.Recoverer)
-	s.router.Use(middleware.Logger)
 
 	s.router.Use(middleware.Timeout(60 * time.Second))
 
