@@ -16,6 +16,7 @@ import (
 var (
 	exampleDSN = "postgres://postgres:xxx@localhost:5432/postgres"
 	dsn        = flag.String("dsn", exampleDSN, "dsn for postgres database")
+	routes     = flag.Bool("routes", false, "Generate router documentation")
 )
 
 func getDSN(dsnFlag *string) (string, error) {
@@ -60,5 +61,11 @@ func main() {
 	defer scoreKeeper.Stop()
 
 	s := server.NewServer(scoreKeeper)
+
+	if *routes {
+		fmt.Println(s.Usage())
+		return
+	}
+
 	s.ListenAndServe(":3000")
 }

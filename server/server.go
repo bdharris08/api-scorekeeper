@@ -6,6 +6,7 @@ import (
 
 	"github.com/bdharris08/scorekeeper"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/docgen"
 )
 
 // handle http requests and response
@@ -31,6 +32,10 @@ func NewServer(sk *scorekeeper.ScoreKeeper) *Server {
 	s.routes()
 
 	return s
+}
+
+func (s *Server) Usage() string {
+	return docgen.MarkdownRoutesDoc(s.router, docgen.MarkdownOpts{})
 }
 
 func (s *Server) ListenAndServe(address string) {
