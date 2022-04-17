@@ -3,7 +3,7 @@ module api-scorekeeper
 go 1.18
 
 require (
-	github.com/bdharris08/scorekeeper v0.0.0-20220416194222-e695e3ad22f9 // indirect
+	github.com/bdharris08/scorekeeper v0.0.0-20220417202255-fb0b2caaf210 // indirect
 	github.com/go-chi/chi/v5 v5.0.7 // indirect
 	github.com/go-chi/docgen v1.2.0 // indirect
 	github.com/go-chi/render v1.0.1 // indirect

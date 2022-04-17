@@ -3,6 +3,8 @@ github.com/DATA-DOG/go-sqlmock v1.5.0/go.mod h1:f/Ixk793poVmq4qj/V1dPUg2JEAKC73Q
 github.com/Masterminds/semver/v3 v3.1.1/go.mod h1:VPu/7SZ7ePZ3QOrcuXROw5FAcLl4a0cBrbBpGY/8hQs=
 github.com/bdharris08/scorekeeper v0.0.0-20220416194222-e695e3ad22f9 h1:umewiqY0YIzCG6INGN3l6EFPRCWf/vcunka5PddLXEw=
 github.com/bdharris08/scorekeeper v0.0.0-20220416194222-e695e3ad22f9/go.mod h1:vckil1sLYJb83gFvNHyOKBGVF0zA9+lTcqGcFJW9Ht4=
+github.com/bdharris08/scorekeeper v0.0.0-20220417202255-fb0b2caaf210 h1:NLcquMLdfgEEsYWLaMoJCuGlAeuEWi/C4ovL6Ri1zb0=
+github.com/bdharris08/scorekeeper v0.0.0-20220417202255-fb0b2caaf210/go.mod h1:vckil1sLYJb83gFvNHyOKBGVF0zA9+lTcqGcFJW9Ht4=
 github.com/cockroachdb/apd v1.1.0/go.mod h1:8Sl8LxpKi29FqWXR16WEFZRNSz3SoPzUzeMeY4+DwBQ=
 github.com/coreos/go-systemd v0.0.0-20190321100706-95778dfbb74e/go.mod h1:F5haX7vjVVG0kc13fIWeqUViNPyEJxv/OmvnBo0Yme4=
 github.com/coreos/go-systemd v0.0.0-20190719114852-fd7a80b32e1f/go.mod h1:F5haX7vjVVG0kc13fIWeqUViNPyEJxv/OmvnBo0Yme4=
