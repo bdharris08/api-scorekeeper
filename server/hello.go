@@ -1,8 +1,9 @@
 package server
 
 import (
-	"encoding/json"
 	"net/http"
+
+	"github.com/go-chi/render"
 )
 
 func (s *Server) handleHello() http.HandlerFunc {
@@ -19,15 +20,6 @@ func (s *Server) handleHello() http.HandlerFunc {
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		json, err := json.Marshal(standard)
-		if err != nil {
-			http.Error(w, http.StatusText(500), 500)
-			return
-		}
-		_, err = w.Write(json)
-		if err != nil {
-			http.Error(w, http.StatusText(500), 500)
-			return
-		}
+		render.JSON(w, r, standard)
 	}
 }
