@@ -6,7 +6,7 @@ import (
 	"github.com/go-chi/render"
 )
 
-func (s *Server) handleHello() http.HandlerFunc {
+func (s *Server) HandleHello() http.HandlerFunc {
 	// keep handler request and response types in each handler,
 	// only need to export shared response types
 	type response struct {

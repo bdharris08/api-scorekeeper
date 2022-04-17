@@ -17,6 +17,6 @@ func (s *Server) routes() {
 	s.router.Use(middleware.Timeout(60 * time.Second))
 
 	s.router.Route("/hello", func(r chi.Router) {
-		r.Get("/", s.handleHello())
+		r.Get("/", s.HandleHello())
 	})
 }
