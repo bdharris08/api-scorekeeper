@@ -19,4 +19,9 @@ func (s *Server) routes() {
 	s.router.Route("/hello", func(r chi.Router) {
 		r.Get("/", s.HandleHello())
 	})
+
+	s.router.Route("/scores/{scoreType}", func(r chi.Router) {
+		r.Use(s.ScoreCtx)
+		r.Post("/", s.HandleAddAction())
+	})
 }

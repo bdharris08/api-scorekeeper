@@ -44,11 +44,6 @@ func (s *Server) ListenAndServe(address string) {
 }
 
 // TODO
-func (s *Server) HandleAddAction() http.HandlerFunc {
-	return nil
-}
-
-// TODO
 func (s *Server) HandleGetStats() http.HandlerFunc {
 	return nil
 }
