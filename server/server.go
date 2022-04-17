@@ -42,8 +42,3 @@ func (s *Server) ListenAndServe(address string) {
 	fmt.Println("Listening on ", address)
 	http.ListenAndServe(address, s.router)
 }
-
-// TODO
-func (s *Server) HandleGetStats() http.HandlerFunc {
-	return nil
-}
