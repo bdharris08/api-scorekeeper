@@ -12,8 +12,15 @@ import (
 	"github.com/go-chi/render"
 )
 
-const scoreTypeKey = "scoreType"
+// context pkg suggests using a unique non-string type for keys
+type contextKey string
 
+const (
+	scoreType    = "scoreType"
+	scoreTypeKey = contextKey(scoreType)
+)
+
+// HandleAddAction validates then adds actions to the ScoreKeeper
 func (s *Server) HandleAddAction() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		st, ok := r.Context().Value(scoreTypeKey).(string)
@@ -21,9 +28,6 @@ func (s *Server) HandleAddAction() http.HandlerFunc {
 			render.Render(w, r, ErrInternalServer(errors.New("failed to get scoreType from context")))
 			return
 		}
-
-		fmt.Println(r.ContentLength)
-		fmt.Println(r.Body)
 
 		// validate the incoming json body
 		body := make(map[string]interface{}, 2)
@@ -53,7 +57,7 @@ func (s *Server) HandleAddAction() http.HandlerFunc {
 // ScoreCtx gets the scoreType from the url parameter
 func (s *Server) ScoreCtx(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		scoreType := chi.URLParam(r, scoreTypeKey)
+		scoreType := chi.URLParam(r, scoreType)
 		// We need to check the scoreType for sql injection attacks
 		// 	since `database/sql` doesn't let us use placeholders for table names.
 		// A better architecture in scorekeeper wouldn't take table names as a parameter
@@ -64,7 +68,7 @@ func (s *Server) ScoreCtx(next http.Handler) http.Handler {
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), scoreTypeKey, scoreType)
+		ctx := context.WithValue(r.Context(), contextKey(scoreTypeKey), scoreType)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
