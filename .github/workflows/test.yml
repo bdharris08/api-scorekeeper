@@ -1,49 +1,22 @@
 name: test
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
     branches: [ main ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        go: [ '1.17', '1.18' ]
-    name: go build with ${{ matrix.go }}
+  test:
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v3
-
-      - name: Setup go
-        uses: actions/setup-go@v3
-        with:
-          go-version: ${{ matrix.go }}
-
-      - name: Vet
-        run: go vet ./...
-
-      - name: Build
-        run: go build -v ./...
-
-      - name: Test
-        run: go test -v ./... -race
-
-  tag:
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    name: Tag
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Create tag
-        uses: actions/github-script@v5
-        with:
-          script: |
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'refs/tags/v1.0.${{ github.run_number }}',
-              sha: context.sha
-            })
+      - name: Build the stack
+        run: docker-compose up -d
+      - name: Test Hello
+        run: |
+          docker run --network container:scorekeeper-api appropriate/curl -s --retry 10 --retry-connrefused http://localhost:3000/hello
+      - name: Test Trial
+        run: |
+          docker run --network container:scorekeeper-api appropriate/curl -s --retry 10 --retry-connrefused \
+            -H 'Content-Type: application/json' -d '{"action": "hop", "time": 100}' -X POST http://localhost:3000/scores/trial && \
+            curl -s http://localhost:3000/scores/trial/average | grep "hop"
+      

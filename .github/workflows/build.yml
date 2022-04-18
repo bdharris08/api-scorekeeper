@@ -1,0 +1,49 @@
+name: build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go: [ '1.17', '1.18' ]
+    name: go build with ${{ matrix.go }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go }}
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Build
+        run: go build -v ./...
+
+      - name: Test
+        run: go test -v ./... -race
+
+  tag:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    name: Tag
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Create tag
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/v1.0.${{ github.run_number }}',
+              sha: context.sha
+            })
