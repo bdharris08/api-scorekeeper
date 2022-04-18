@@ -5,24 +5,19 @@ on:
     branches: [ main ]
 
 jobs:
-  setup:
+  test:
     runs-on: ubuntu-18.04
-    name: setup
     steps:
       - uses: actions/checkout@v3
       - name: Build the stack
         run: docker-compose up -d
-  
-  test:
-    runs-on: ubuntu-18.04
-    needs: setup
-    steps:
       - name: Test Hello
         run: |
           docker run --network container:scorekeeper-api appropriate/curl -s --retry 10 --retry-connrefused \
-             http://localhost:3000/hello
+            http://localhost:3000/hello
       - name: Test Trial
         run: |
           docker run --network container:scorekeeper-api appropriate/curl -s --retry 10 --retry-connrefused \
             -H 'Content-Type: application/json' -d '{"action": "hop", "time": 100}' -X POST http://localhost:3000/scores/trial && \
-           curl -s http://localhost:3000/scores/trial/average | grep "hop"
+            curl -s http://localhost:3000/scores/trial/average | grep "hop"
+      
