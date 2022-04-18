@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  app:
+    container_name: scorekeeper-api
+    build: .
+    ports:
+      - 3000:3000
+    restart: on-failure
+    environment:
+      DATABASE_URL: "postgres://user:notsecret@db:5432/test?sslmode=disable"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    links:
+      - db
+
+  db:
+    image: postgres
+    container_name: scorekeeper-db
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "notsecret"
+      POSTGRES_DB: "test"
+
+  dbsetup:
+    image: postgres
+    depends_on:
+      - db
+    restart: "no"
+    entrypoint: [ "bash", "-c", "sleep 10 && PGPASSWORD=notsecret psql -h db -U user -d test -c 'CREATE TABLE trial (id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY, name text NOT NULL, value numeric NOT NULL);'"]
