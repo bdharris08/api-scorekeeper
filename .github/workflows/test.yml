@@ -13,8 +13,7 @@ jobs:
         run: docker-compose up -d
       - name: Test Hello
         run: |
-          docker run --network container:scorekeeper-api appropriate/curl -s --retry 10 --retry-connrefused \
-            http://localhost:3000/hello
+          docker run --network container:scorekeeper-api appropriate/curl -s --retry 10 --retry-connrefused http://localhost:3000/hello
       - name: Test Trial
         run: |
           docker run --network container:scorekeeper-api appropriate/curl -s --retry 10 --retry-connrefused \
