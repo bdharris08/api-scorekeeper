@@ -7,6 +7,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
+// routes sets up the chi routes and middleware
 func (s *Server) routes() {
 	// middleware stack (recommended in chi docs)
 	s.router.Use(middleware.RequestID)

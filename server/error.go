@@ -12,6 +12,7 @@ import (
 	https://github.com/go-chi/chi/tree/master/_examples/rest/main.go#L405
 */
 
+// ErrResponse defines the error response format
 type ErrResponse struct {
 	Err            error `json:"-"` // low-level runtime error
 	HTTPStatusCode int   `json:"-"` // http response status code
@@ -21,11 +22,13 @@ type ErrResponse struct {
 	ErrorText  string `json:"error,omitempty"` // application-level error message, for debugging
 }
 
+// Render the ErrResponse
 func (e *ErrResponse) Render(w http.ResponseWriter, r *http.Request) error {
 	render.Status(r, e.HTTPStatusCode)
 	return nil
 }
 
+// ErrInvalidRequest wraps err in an invalid request response
 func ErrInvalidRequest(err error) render.Renderer {
 	return &ErrResponse{
 		Err:            err,
@@ -35,11 +38,12 @@ func ErrInvalidRequest(err error) render.Renderer {
 	}
 }
 
+// ErrInternalServer wraps err in an invalid request response
 func ErrInternalServer(err error) render.Renderer {
 	return &ErrResponse{
 		Err:            err,
 		HTTPStatusCode: http.StatusInternalServerError,
-		StatusText:     "internal error",
+		StatusText:     "Internal error.",
 		ErrorText:      err.Error(),
 	}
 }

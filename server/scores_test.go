@@ -10,9 +10,12 @@ import (
 	"github.com/bdharris08/scorekeeper"
 	"github.com/bdharris08/scorekeeper/score"
 	"github.com/bdharris08/scorekeeper/store"
+
+	// using MatRyer's cool `is` testing package
 	"github.com/matryer/is"
 )
 
+// setupScoreKeeper is a helper function to set up tests
 func setupScoreKeeper(t *testing.T) *scorekeeper.ScoreKeeper {
 	s := &store.MemoryStore{}
 	f := score.ScoreFactory{

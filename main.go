@@ -14,33 +14,48 @@ import (
 )
 
 var (
-	exampleDSN = "postgres://postgres:xxx@localhost:5432/postgres"
-	dsn        = flag.String("dsn", exampleDSN, "dsn for postgres database")
-	routes     = flag.Bool("routes", false, "Generate router documentation")
+	exampleDSN    = "postgres://postgres:xxx@localhost:5432/postgres"
+	dsn           = flag.String("dsn", exampleDSN, "dsn for postgres database")
+	routes        = flag.Bool("routes", false, "Generate router documentation")
+	listenAddress = flag.String("listen", ":3000", "address to listen on")
 )
 
-func getDSN(dsnFlag *string) (string, error) {
+// primitive config setup
+// A production app might use a custom config package
+// 	that enforces precedence between configuration sources
+//  which could be flags, env vars,
+//	or even remote sources like parameter store or secrets manager.
+type config struct {
+	dsn           string
+	listenAddress string
+}
+
+func getConfig() config {
+	conf := config{}
+
 	flag.Parse()
-	if *dsn != exampleDSN {
-		return *dsn, nil
+
+	switch {
+	case *dsn != exampleDSN:
+		conf.dsn = *dsn
+	case os.Getenv("DATABASE_URL") != "":
+		conf.dsn = os.Getenv("DATABASE_URL")
 	}
 
-	d := os.Getenv("DATABASE_URL")
-	if d != "" {
-		return d, nil
+	switch {
+	case *listenAddress != ":3000":
+		conf.listenAddress = *listenAddress
+	case os.Getenv("LISTEN") != "":
+		conf.listenAddress = os.Getenv("LISTEN")
 	}
 
-	return "", fmt.Errorf("dsn must be provided by --dsn or en var 'DATABASE_URL'")
+	return conf
 }
 
 func main() {
-	DSN, err := getDSN(dsn)
-	if err != nil {
-		fmt.Fprint(os.Stderr, err)
-		os.Exit(1)
-	}
+	conf := getConfig()
 
-	db, err := sql.Open("pgx", DSN)
+	db, err := sql.Open("pgx", conf.dsn)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		os.Exit(1)
@@ -67,5 +82,5 @@ func main() {
 		return
 	}
 
-	s.ListenAndServe(":3000")
+	s.ListenAndServe(conf.listenAddress)
 }
