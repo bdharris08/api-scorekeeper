@@ -9,20 +9,20 @@ import (
 	"github.com/go-chi/docgen"
 )
 
-// handle http requests and response
-// call scorekeeper
-// two request types
-// - add action
-// - get stats
-
-// Following along with https://github.com/go-chi/chi
-// based on advice from: https://www.veritone.com/blog/how-i-write-go-http-services-after-seven-years/
-
+// Server facilitates http requests to a ScoreKeeper
+// It uses the chi router
+// The pattern is adapted from:
+// - https://github.com/go-chi/chi
+// - https://www.veritone.com/blog/how-i-write-go-http-services-after-seven-years/
 type Server struct {
 	sk     *scorekeeper.ScoreKeeper
 	router chi.Router
 }
 
+// NewServer returns a new initialized server
+// the provided scorekeeper should:
+// - be running
+// - have an initialized Store
 func NewServer(sk *scorekeeper.ScoreKeeper) *Server {
 	s := &Server{
 		sk: sk,
@@ -34,10 +34,12 @@ func NewServer(sk *scorekeeper.ScoreKeeper) *Server {
 	return s
 }
 
+// Usage returns the Server routes
 func (s *Server) Usage() string {
-	return docgen.MarkdownRoutesDoc(s.router, docgen.MarkdownOpts{})
+	return docgen.JSONRoutesDoc(s.router)
 }
 
+// ListenAndServe starts the Server listening for requests
 func (s *Server) ListenAndServe(address string) {
 	fmt.Println("Listening on ", address)
 	http.ListenAndServe(address, s.router)

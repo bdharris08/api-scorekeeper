@@ -6,6 +6,7 @@ import (
 	"github.com/go-chi/render"
 )
 
+// HandleHello responds with Hello World!
 func (s *Server) HandleHello() http.HandlerFunc {
 	// keep handler request and response types in each handler,
 	// only need to export shared response types
