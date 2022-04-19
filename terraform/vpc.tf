@@ -11,7 +11,7 @@ resource "aws_vpc" "main" {
 
 resource "aws_subnet" "private_d" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.2.0/25"
+  cidr_block        = "10.1.1.0/25"
   availability_zone = "us-east-1d"
 
   tags = {
@@ -21,7 +21,7 @@ resource "aws_subnet" "private_d" {
 
 resource "aws_subnet" "private_e" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.3.0/25"
+  cidr_block        = "10.1.2.0/25"
   availability_zone = "us-east-1e"
 
   tags = {
