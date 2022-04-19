@@ -71,21 +71,9 @@ resource "aws_ecs_task_definition" "app" {
     ],
     "environment": [
       {
-        "name": "PORT",
-        "value": "${var.container_port}"
+        "name": "LISTEN",
+        "value": ":${var.container_port}"
       },
-      {
-        "name": "ENABLE_LOGGING",
-        "value": "false"
-      },
-      {
-        "name": "PRODUCT",
-        "value": "${var.app}"
-      },
-      {
-        "name": "ENVIRONMENT",
-        "value": "${var.environment}"
-      }
     ],
     "logConfiguration": {
       "logDriver": "awslogs",
@@ -147,7 +135,7 @@ data "aws_iam_policy_document" "assume_role_policy" {
 
     principals {
       type        = "Service"
-      identifiers = ["ecs-tasks.amazonaws.com"]
+      identifiers = ["ecs.amazonaws.com", "ecs-tasks.amazonaws.com"]
     }
   }
 }
