@@ -1,11 +1,11 @@
 resource "aws_api_gateway_vpc_link" "main" {
-  name        = "${local.namespace}"
+  name        = local.namespace
   description = "allows public API Gateway for ${local.namespace} to talk to private NLB"
   target_arns = [aws_lb.main.arn]
 }
 
 resource "aws_api_gateway_rest_api" "main" {
-  name = "${local.namespace}"
+  name = local.namespace
 
   endpoint_configuration {
     types = ["REGIONAL"]
