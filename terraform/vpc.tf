@@ -13,23 +13,23 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
 }
 
-resource "aws_subnet" "private_d" {
+resource "aws_subnet" "private_b" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.10.0/25"
-  availability_zone = "us-east-1d"
+  availability_zone = "us-east-1b"
 
   tags = {
-    "Name" = "${var.app} | private | us-east-1d"
+    "Name" = "${var.app} | private | us-east-1b"
   }
 }
 
-resource "aws_subnet" "private_e" {
+resource "aws_subnet" "private_c" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.11.0/25"
-  availability_zone = "us-east-1e"
+  availability_zone = "us-east-1c"
 
   tags = {
-    "Name" = "${var.app} | private | us-east-1d"
+    "Name" = "${var.app} | private | us-east-1c"
   }
 }
 
