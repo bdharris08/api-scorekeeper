@@ -99,7 +99,7 @@ resource "aws_ecs_service" "app" {
   desired_count   = var.replicas
 
   network_configuration {
-    security_groups = [aws_security_group.nsg_task.id,aws_security_group.egress_all.id]
+    security_groups = [aws_security_group.nsg_task.id, aws_security_group.egress_all.id]
     subnets         = [aws_subnet.private_d.id, aws_subnet.private_e.id]
   }
 
