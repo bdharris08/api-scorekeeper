@@ -59,7 +59,7 @@ resource "aws_api_gateway_integration_response" "main" {
   resource_id = aws_api_gateway_resource.main.id
   http_method = aws_api_gateway_method.main.http_method
   status_code = aws_api_gateway_method_response.main.status_code
-  
+
   depends_on = [
     aws_api_gateway_integration.main
   ]

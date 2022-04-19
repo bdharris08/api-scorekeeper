@@ -32,7 +32,7 @@ resource "aws_security_group_rule" "nsg_task_egress_rule" {
 # lookup the ENIs associated with the NLB
 data "aws_network_interface" "nlb" {
   for_each = aws_lb.main.subnets
-  
+
   filter {
     name   = "description"
     values = ["ELB ${aws_lb.main.arn_suffix}"]

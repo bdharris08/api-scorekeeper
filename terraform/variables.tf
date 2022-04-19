@@ -51,5 +51,5 @@ variable "vpc" {
 }
 
 locals {
-  namespace      = "${var.app}-${var.environment}"
+  namespace = "${var.app}-${var.environment}"
 }
