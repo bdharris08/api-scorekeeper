@@ -99,6 +99,23 @@ resource "aws_vpc_endpoint" "dkr" {
   }
 }
 
+resource "aws_vpc_endpoint" "ecr-api" {
+  vpc_id              = aws_vpc.main.id
+  private_dns_enabled = true
+  service_name        = "com.amazonaws.${var.region}.ecr.api"
+  vpc_endpoint_type   = "Interface"
+  security_group_ids = [
+    aws_security_group.egress_all.id,
+    aws_security_group.nsg_task.id,
+  ]
+  subnet_ids = [aws_subnet.private_d.id, aws_subnet.private_e.id]
+
+  tags = {
+    Name        = "ecr-api-endpoint"
+    Environment = "demo"
+  }
+}
+
 resource "aws_vpc_endpoint" "logs" {
   vpc_id              = aws_vpc.main.id
   private_dns_enabled = true
