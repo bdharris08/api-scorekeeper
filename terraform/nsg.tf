@@ -13,10 +13,7 @@ resource "aws_security_group_rule" "nsg_task_ingress_rule" {
   from_port   = var.container_port
   to_port     = var.container_port
   protocol    = "tcp"
-  cidr_blocks = formatlist(
-    "%s/32",
-    flatten(data.aws_network_interface.nlb.*.private_ips),
-  )
+  cidr_blocks = formatlist("%s/32", [for eni in data.aws_network_interface.nlb : eni.private_ip])
 
   security_group_id = aws_security_group.nsg_task.id
 }
@@ -34,8 +31,8 @@ resource "aws_security_group_rule" "nsg_task_egress_rule" {
 
 # lookup the ENIs associated with the NLB
 data "aws_network_interface" "nlb" {
-  count = 2
-
+  for_each = aws_lb.main.subnets
+  
   filter {
     name   = "description"
     values = ["ELB ${aws_lb.main.arn_suffix}"]
@@ -43,7 +40,7 @@ data "aws_network_interface" "nlb" {
 
   filter {
     name   = "subnet-id"
-    values = [aws_subnet.private_d.id, aws_subnet.private_e.id]
+    values = [each.value]
   }
 }
 
