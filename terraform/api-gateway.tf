@@ -60,6 +60,10 @@ resource "aws_api_gateway_integration_response" "main" {
   http_method = aws_api_gateway_method.main.http_method
   status_code = aws_api_gateway_method_response.main.status_code
 
+  depends_on = [
+    aws_api_gateway_integration.main
+  ]
+
   response_templates = {
     "application/json" = ""
   }

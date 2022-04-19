@@ -6,7 +6,7 @@ variable "api_usage_quota_limit" {
 
 variable "api_usage_quota_offset" {
   type        = number
-  default     = 5
+  default     = 0
   description = "The number of requests subtracted from the given limit in the initial time period"
 }
 

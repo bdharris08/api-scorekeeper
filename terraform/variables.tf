@@ -50,11 +50,6 @@ variable "lb_protocol" {
 variable "vpc" {
 }
 
-# The private subnets, minimum of 2, that are a part of the VPC(s)
-variable "private_subnets" {
-}
-
 locals {
-  namespace      = "${var.app}-${var.environment}"
-  target_subnets = split(",", var.private_subnets)
+  namespace = "${var.app}-${var.environment}"
 }

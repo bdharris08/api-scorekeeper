@@ -48,6 +48,7 @@ resource "aws_ecs_cluster" "app" {
 # https://github.com/turnerlabs/fargate
 # note that the source for the turner default backend image is here:
 # https://github.com/turnerlabs/turner-defaultbackend
+# TODO
 variable "default_backend_image" {
   default = "quay.io/turner/turner-defaultbackend:0.2.0"
 }
@@ -127,7 +128,7 @@ resource "aws_ecs_service" "app" {
 
   network_configuration {
     security_groups = [aws_security_group.nsg_task.id]
-    subnets         = split(",", var.private_subnets)
+    subnets         = [aws_subnet.private_d.id, aws_subnet.private_e.id]
   }
 
   load_balancer {

@@ -95,12 +95,6 @@ data "aws_iam_policy_document" "kms_resource_policy_doc" {
 
     actions   = local.kms_write_actions
     resources = ["*"]
-
-    condition {
-      test     = "StringLike"
-      variable = "aws:userId"
-      values   = ["ben"]
-    }
   }
 
   statement {
@@ -114,12 +108,6 @@ data "aws_iam_policy_document" "kms_resource_policy_doc" {
 
     actions   = local.kms_read_actions
     resources = ["*"]
-
-    condition {
-      test     = "StringLike"
-      variable = "aws:userId"
-      values   = ["ben"]
-    }
   }
 }
 

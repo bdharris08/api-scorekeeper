@@ -1,17 +1,10 @@
 # creates an application role that the container/task runs as
 resource "aws_iam_role" "app_role" {
   name               = "${var.app}-${var.environment}"
-  assume_role_policy = data.aws_iam_policy_document.app_policy.json
+  assume_role_policy = data.aws_iam_policy_document.ecs_task_assume_role.json
 }
 
-# assigns the app policy
-resource "aws_iam_role_policy" "app_policy" {
-  name   = "${var.app}-${var.environment}"
-  role   = aws_iam_role.app_role.id
-  policy = data.aws_iam_policy_document.app_policy.json
-}
-
-data "aws_iam_policy_document" "app_policy" {
+data "aws_iam_policy_document" "ecs_task_assume_role" {
   statement {
     actions = ["sts:AssumeRole"]
 
