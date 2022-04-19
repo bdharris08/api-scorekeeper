@@ -1,0 +1,14 @@
+
+version: "3.7"
+services:
+  api-scorekeeper:
+    build: ../../../
+    image: 621387225812.dkr.ecr.us-east-1.amazonaws.com/api-scorekeeper:0.1.0
+    ports:
+    - 3000:3000
+    env_file:
+    - hidden.env
+    labels:
+      aws.ecs.fargate.deploy: 1
+    #x-fargate-secrets:
+      #KEY: value
