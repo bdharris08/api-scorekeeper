@@ -73,7 +73,7 @@ resource "aws_ecs_task_definition" "app" {
       {
         "name": "LISTEN",
         "value": ":${var.container_port}"
-      },
+      }
     ],
     "logConfiguration": {
       "logDriver": "awslogs",
