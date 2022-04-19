@@ -48,6 +48,7 @@ resource "aws_ecs_cluster" "app" {
 # https://github.com/turnerlabs/fargate
 # note that the source for the turner default backend image is here:
 # https://github.com/turnerlabs/turner-defaultbackend
+# TODO
 variable "default_backend_image" {
   default = "quay.io/turner/turner-defaultbackend:0.2.0"
 }
