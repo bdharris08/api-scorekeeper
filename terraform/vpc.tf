@@ -42,7 +42,7 @@ resource "aws_route_table_association" "private_d_subnet" {
 }
 
 resource "aws_security_group" "egress_all" {
-  name        = "${var.app} | egress-all"
+  name        = "${var.app}-egress-all"
   description = "Allow all outbound traffic for ${var.app}"
   vpc_id      = aws_vpc.main.id
 
