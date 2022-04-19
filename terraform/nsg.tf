@@ -25,6 +25,19 @@ resource "aws_security_group_rule" "nsg_task_egress_rule" {
   to_port     = "0"
   protocol    = "-1"
   cidr_blocks = ["0.0.0.0/0"]
+  prefix_list_ids = [aws_vpc_endpoint.s3.prefix_list_id]
+
+  security_group_id = aws_security_group.nsg_task.id
+}
+
+resource "aws_security_group_rule" "nsg_task_egress_rule_vpc_link" {
+  description = "Allows task to establish connections through VPC Link"
+  type        = "egress"
+  from_port   = "443"
+  to_port     = "443"
+  protocol    = "tcp"
+  cidr_blocks = [aws_vpc.main.cidr_block]
+  prefix_list_ids = [aws_vpc_endpoint.s3.prefix_list_id]
 
   security_group_id = aws_security_group.nsg_task.id
 }
