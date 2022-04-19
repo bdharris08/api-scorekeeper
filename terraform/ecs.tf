@@ -6,10 +6,6 @@
  * Next it creates a ECS Service, https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs_services.html
  * It attaches the Load Balancer created in `lb.tf` to the service, and sets up the networking required.
  * It also creates a role with the correct permissions. And lastly, ensures that logs are captured in CloudWatch.
- *
- * When building for the first time, it will install a "default backend", which is a simple web service that just
- * responds with a HTTP 200 OK. It's important to uncomment the lines noted below after you have successfully
- * migrated the real application containers to the task definition.
  */
 
 # How many containers to run
@@ -41,18 +37,6 @@ resource "aws_ecs_cluster" "app" {
   tags = var.tags
 }
 
-# The default docker image to deploy with the infrastructure.
-# Note that you can use the fargate CLI for application concerns
-# like deploying actual application images and environment variables
-# on top of the infrastructure provisioned by this template
-# https://github.com/turnerlabs/fargate
-# note that the source for the turner default backend image is here:
-# https://github.com/turnerlabs/turner-defaultbackend
-# TODO
-variable "default_backend_image" {
-  default = "quay.io/turner/turner-defaultbackend:0.2.0"
-}
-
 resource "aws_appautoscaling_target" "app_scale_target" {
   service_namespace  = "ecs"
   resource_id        = "service/${aws_ecs_cluster.app.name}/${aws_ecs_service.app.name}"
@@ -76,7 +60,7 @@ resource "aws_ecs_task_definition" "app" {
 [
   {
     "name": "${var.container_name}",
-    "image": "${var.default_backend_image}",
+    "image": "${aws_ecr_repository.app.repository_url}:latest",
     "essential": true,
     "portMappings": [
       {
@@ -127,7 +111,7 @@ resource "aws_ecs_service" "app" {
   desired_count   = var.replicas
 
   network_configuration {
-    security_groups = [aws_security_group.nsg_task.id]
+    security_groups = [aws_security_group.nsg_task.id,aws_security_group.egress_all.id]
     subnets         = [aws_subnet.private_d.id, aws_subnet.private_e.id]
   }
 
