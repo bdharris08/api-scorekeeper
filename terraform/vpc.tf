@@ -38,7 +38,7 @@ resource "aws_db_subnet_group" "private_group" {
   subnet_ids = [aws_subnet.private_d.id, aws_subnet.private_e.id]
 
   tags = {
-    Name = "${var.app} | private | subnet_group"
+    "Name" = "${var.app}"
   }
 }
 
