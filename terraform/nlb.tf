@@ -35,7 +35,7 @@ resource "aws_lb_target_group" "main" {
   name                 = "${var.app}-${var.environment}"
   port                 = var.lb_port
   protocol             = var.lb_protocol
-  vpc_id               = var.vpc
+  vpc_id               = aws_vpc.main.id
   target_type          = "ip"
   deregistration_delay = var.deregistration_delay
 

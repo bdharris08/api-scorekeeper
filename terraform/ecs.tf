@@ -127,7 +127,7 @@ resource "aws_ecs_service" "app" {
 
   network_configuration {
     security_groups = [aws_security_group.nsg_task.id]
-    subnets         = split(",", var.private_subnets)
+    subnets         = [aws_subnet.private_d, aws_subnet.private_e]
   }
 
   load_balancer {

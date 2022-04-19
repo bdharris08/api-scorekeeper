@@ -1,7 +1,7 @@
 resource "aws_security_group" "nsg_task" {
   name        = "${var.app}-${var.environment}-task"
   description = "Limit connections from internal resources while allowing ${var.app}-${var.environment}-task to connect to all external resources"
-  vpc_id      = var.vpc
+  vpc_id      = aws_vpc.main.id
 
   tags = var.tags
 }
@@ -34,7 +34,7 @@ resource "aws_security_group_rule" "nsg_task_egress_rule" {
 
 # lookup the ENIs associated with the NLB
 data "aws_network_interface" "nlb" {
-  count = length(local.target_subnets)
+  count = 2
 
   filter {
     name   = "description"
@@ -43,7 +43,7 @@ data "aws_network_interface" "nlb" {
 
   filter {
     name   = "subnet-id"
-    values = [element(local.target_subnets, count.index)]
+    values = [aws_subnet.private_d.id, aws_subnet.private_e.id]
   }
 }
 
