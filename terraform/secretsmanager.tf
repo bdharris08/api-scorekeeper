@@ -61,24 +61,6 @@ locals {
     "secretsmanager:GetSecretValue",
   ]
 
-  # list of saml users for policies
-  saml_user_ids = flatten([
-    data.aws_caller_identity.current.user_id,
-    data.aws_caller_identity.current.account_id,
-    formatlist(
-      "%s:%s",
-      data.aws_iam_role.saml_role.unique_id,
-      var.secrets_saml_users,
-    ),
-  ])
-
-  # list of role users and saml users for policies
-  role_and_saml_ids = flatten([
-    "${aws_iam_role.app_role.unique_id}:*",
-    "${aws_iam_role.ecsTaskExecutionRole.unique_id}:*",
-    local.saml_user_ids,
-  ])
-
   sm_arn = "arn:aws:secretsmanager:${var.region}:${data.aws_caller_identity.current.account_id}:secret:${var.app}-${var.environment}-??????"
 }
 
@@ -103,45 +85,7 @@ resource "aws_kms_alias" "sm_kms_alias" {
 # the kms key policy
 data "aws_iam_policy_document" "kms_resource_policy_doc" {
   statement {
-    sid    = "DenyWriteToAllExceptSAMLUsers"
-    effect = "Deny"
-
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
-    }
-
-    actions   = local.kms_write_actions
-    resources = ["*"]
-
-    condition {
-      test     = "StringNotLike"
-      variable = "aws:userId"
-      values   = local.saml_user_ids
-    }
-  }
-
-  statement {
-    sid    = "DenyReadToAllExceptRoleAndSAMLUsers"
-    effect = "Deny"
-
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
-    }
-
-    actions   = local.kms_read_actions
-    resources = ["*"]
-
-    condition {
-      test     = "StringNotLike"
-      variable = "aws:userId"
-      values   = local.role_and_saml_ids
-    }
-  }
-
-  statement {
-    sid    = "AllowWriteToSAMLUsers"
+    sid    = "AllowWrite"
     effect = "Allow"
 
     principals {
@@ -155,12 +99,12 @@ data "aws_iam_policy_document" "kms_resource_policy_doc" {
     condition {
       test     = "StringLike"
       variable = "aws:userId"
-      values   = local.saml_user_ids
+      values   = ["ben"]
     }
   }
 
   statement {
-    sid    = "AllowReadRoleAndSAMLUsers"
+    sid    = "AllowReadRole"
     effect = "Allow"
 
     principals {
@@ -174,7 +118,7 @@ data "aws_iam_policy_document" "kms_resource_policy_doc" {
     condition {
       test     = "StringLike"
       variable = "aws:userId"
-      values   = local.role_and_saml_ids
+      values   = ["ben"]
     }
   }
 }
@@ -193,53 +137,10 @@ resource "aws_secretsmanager_secret_version" "initial" {
   secret_string = "{}"
 }
 
-# get the saml user info so we can get the unique_id
-data "aws_iam_role" "saml_role" {
-  name = var.saml_role
-}
-
 # resource policy doc that limits access to secret
 data "aws_iam_policy_document" "sm_resource_policy_doc" {
   statement {
-    sid    = "DenyWriteToAllExceptSAMLUsers"
-    effect = "Deny"
-
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
-    }
-
-    actions   = local.sm_write_actions
-    resources = [local.sm_arn]
-
-    condition {
-      test     = "StringNotLike"
-      variable = "aws:userId"
-      values   = local.saml_user_ids
-    }
-  }
-
-  statement {
-    sid    = "DenyReadToAllExceptRoleAndSAMLUsers"
-    effect = "Deny"
-
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
-    }
-
-    actions   = local.sm_read_actions
-    resources = [local.sm_arn]
-
-    condition {
-      test     = "StringNotLike"
-      variable = "aws:userId"
-      values   = local.role_and_saml_ids
-    }
-  }
-
-  statement {
-    sid    = "AllowWriteToSAMLUsers"
+    sid    = "AllowWrite"
     effect = "Allow"
 
     principals {
@@ -253,12 +154,12 @@ data "aws_iam_policy_document" "sm_resource_policy_doc" {
     condition {
       test     = "StringLike"
       variable = "aws:userId"
-      values   = local.saml_user_ids
+      values   = ["ben"]
     }
   }
 
   statement {
-    sid    = "AllowReadRoleAndSAMLUsers"
+    sid    = "AllowReadRole"
     effect = "Allow"
 
     principals {
@@ -272,12 +173,7 @@ data "aws_iam_policy_document" "sm_resource_policy_doc" {
     condition {
       test     = "StringLike"
       variable = "aws:userId"
-      values   = local.role_and_saml_ids
+      values   = ["ben"]
     }
   }
-}
-
-# The users (email addresses) from the saml role to give access
-variable "secrets_saml_users" {
-  type = list(string)
 }

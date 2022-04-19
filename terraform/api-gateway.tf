@@ -66,7 +66,7 @@ resource "aws_api_gateway_integration_response" "main" {
 }
 
 resource "aws_api_gateway_deployment" "main" {
-  depends_on  = ["aws_api_gateway_integration.main"]
+  depends_on  = [aws_api_gateway_integration.main]
   rest_api_id = aws_api_gateway_rest_api.main.id
   stage_name  = "v1"
 }

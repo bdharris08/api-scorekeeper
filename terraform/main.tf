@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 0.14.9"
+  required_version = ">= 0.12"
 
   required_providers {
     aws = {
@@ -17,14 +17,32 @@ terraform {
   }
 }
 
+/**
+ * main.tf
+ * The main entry point for Terraform run
+ * See variables.tf for common variables
+ * See ecr.tf for creation of Elastic Container Registry for all environments
+ */
+
+# Using the AWS Provider
+# https://www.terraform.io/docs/providers/
 provider "aws" {
   region = "us-east-1"
+
+  default_tags {
+    tags = {
+      App = "api-scorekeeper"
+    }
+  }
 }
 
-output "aws_account" {
-  value = "621387225812"
-}
+/*
+ * Outputs
+ * Results from a successful Terraform run (terraform apply)
+ * To see results after a successful run, use `terraform output [name]`
+ */
 
-output "region" {
-  value = "us-east-1"
+# Returns the name of the ECR registry, this will be used later in various scripts
+output "docker_registry" {
+  value = aws_ecr_repository.app.repository_url
 }

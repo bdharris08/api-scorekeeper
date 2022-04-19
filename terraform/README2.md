@@ -43,7 +43,6 @@ $ terraform apply
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | app | The application's name | string | - | yes |
-| aws_profile | The AWS Profile to use | string | - | yes |
 | container_name | The name of the container to run | string | `app` | no |
 | container_port | The port the container will listen on, used for load balancer health check Best practice is that this value is higher than 1024 so the container processes isn't running at root. | string | - | yes |
 | default_backend_image | The default docker image to deploy with the infrastructure. Note that you can use the fargate CLI for application concerns like deploying actual application images and environment variables on top of the infrastructure provisioned by this template https://github.com/turnerlabs/fargate note that the source for the turner default backend image is here: https://github.com/turnerlabs/turner-defaultbackend | string | `quay.io/turner/turner-defaultbackend:0.2.0` | no |
@@ -62,12 +61,10 @@ $ terraform apply
 | private_subnets | The private subnets, minimum of 2, that are a part of the VPC(s) | string | - | yes |
 | region | The AWS region to use for the dev environment's infrastructure Currently, Fargate is only available in `us-east-1`. | string | `us-east-1` | no |
 | replicas | How many containers to run | string | `1` | no |
-| saml_role | The SAML role to use for adding users to the ECR policy | string | - | yes |
 | scale_down_cron | Default scale down at 7 pm every day | string | `cron(0 23 * * ? *)` | no |
 | scale_down_max_capacity | The maximum number of containers to scale down to. | string | `0` | no |
 | scale_down_min_capacity | The mimimum number of containers to scale down to. Set this and `scale_down_max_capacity` to 0 to turn off service on the `scale_down_cron` schedule. | string | `0` | no |
 | scale_up_cron | Default scale up at 7 am weekdays, this is UTC so it doesn't adjust to daylight savings https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html | string | `cron(0 11 ? * MON-FRI *)` | no |
-| secrets_saml_users | The users (email addresses) from the saml role to give access | list | - | yes |
 | tags | Tags for the infrastructure | map | - | yes |
 | vpc | The VPC to use for the Fargate cluster | string | - | yes |
 
@@ -75,7 +72,6 @@ $ terraform apply
 
 | Name | Description |
 |------|-------------|
-| aws_profile | Command to set the AWS_PROFILE |
 | cicd_keys | The AWS keys for the CICD user to use in a build system |
 | deploy | Command to deploy a new task definition to the service using Docker Compose |
 | docker_registry | The URL for the docker image repo in ECR |
