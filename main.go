@@ -31,7 +31,9 @@ type config struct {
 }
 
 func getConfig() config {
-	conf := config{}
+	conf := config{
+		listenAddress: ":3000",
+	}
 
 	flag.Parse()
 

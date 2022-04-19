@@ -78,3 +78,20 @@ jobs:
         run: |
           docker tag ${ECR_REGISTRY}/${NAME}:v${VERSION} ${ECR_REGISTRY}/${NAME}:latest
           docker push ${ECR_REGISTRY}/${NAME}:latest
+
+      # Make ECS update the running services
+      # sort of a hack, we would normally download the task-definition
+      # then update it with the new image version via aws-actions/..render-task-definition
+      # but we're using "latest" so we just need to push the task definition to trigger ECS
+      - name: Download task definition
+        run: |
+          pwd
+          aws ecs describe-task-definition --task-definition ${NAME}-demo --query taskDefinition > td.json
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: td.json
+          service: api-scorekeeper-demo
+          cluster: api-scorekeeper-demo
+          wait-for-service-stability: true
