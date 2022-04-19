@@ -37,7 +37,7 @@ module "rds" {
   allocated_storage     = 20
   max_allocated_storage = 100
 
-  db_name  = var.app
+  db_name  = "app"
   username = "appuser"
   port     = 5432
 
