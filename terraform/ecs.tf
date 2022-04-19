@@ -73,6 +73,10 @@ resource "aws_ecs_task_definition" "app" {
       {
         "name": "LISTEN",
         "value": ":${var.container_port}"
+      },
+      {
+        "name": "DATABASE_URL",
+        "value": "${var.database_url}"
       }
     ],
     "logConfiguration": {
