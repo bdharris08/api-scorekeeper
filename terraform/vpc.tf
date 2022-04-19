@@ -33,6 +33,15 @@ resource "aws_subnet" "private_e" {
   }
 }
 
+resource "aws_db_subnet_group" "private_group" {
+  name       = "${var.app}-private-subnet-group"
+  subnet_ids = [aws_subnet.private_d.id, aws_subnet.private_e.id]
+
+  tags = {
+    Name = "${var.app} | private | subnet_group"
+  }
+}
+
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
   tags = {

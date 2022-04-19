@@ -29,7 +29,7 @@ variable "ecs_autoscale_min_instances" {
 # The maximum number of containers that should be running.
 # used by both autoscale-perf.tf and autoscale.time.tf
 variable "ecs_autoscale_max_instances" {
-  default = "8"
+  default = "2"
 }
 
 resource "aws_ecs_cluster" "app" {
