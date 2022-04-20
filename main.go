@@ -54,6 +54,19 @@ func getConfig() config {
 	return conf
 }
 
+func setupTrial(db *sql.DB) error {
+	stmt := `CREATE TABLE IF NOT EXISTS trial (
+		id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+		name text NOT NULL,
+		value numeric NOT NULL
+	);`
+	_, err := db.Exec(stmt)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func main() {
 	conf := getConfig()
 
@@ -63,6 +76,11 @@ func main() {
 		os.Exit(1)
 	}
 	defer db.Close()
+
+	if err = setupTrial(db); err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to create trial db: %v\n", err)
+		os.Exit(1)
+	}
 
 	st, _ := store.NewSQLStore(db)
 	factory := score.ScoreFactory{

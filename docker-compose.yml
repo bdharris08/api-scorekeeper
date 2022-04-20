@@ -26,9 +26,9 @@ services:
       POSTGRES_PASSWORD: "notsecret"
       POSTGRES_DB: "test"
 
-  dbsetup:
-    image: postgres
-    depends_on:
-      - db
-    restart: "no"
-    entrypoint: [ "bash", "-c", "sleep 10 && PGPASSWORD=notsecret psql -h db -U user -d test -c 'CREATE TABLE trial (id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY, name text NOT NULL, value numeric NOT NULL);'"]
+  # dbsetup:
+  #   image: postgres
+  #   depends_on:
+  #     - db
+  #   restart: "no"
+  #   entrypoint: [ "bash", "-c", "sleep 10 && PGPASSWORD=notsecret psql -h db -U user -d test -c 'CREATE TABLE trial (id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY, name text NOT NULL, value numeric NOT NULL);'"]
