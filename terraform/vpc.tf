@@ -35,7 +35,7 @@ resource "aws_subnet" "private_c" {
 
 resource "aws_db_subnet_group" "private_group" {
   name       = "${var.app}-private-subnet-group"
-  subnet_ids = [aws_subnet.private_d.id, aws_subnet.private_e.id]
+  subnet_ids = [aws_subnet.private_b.id, aws_subnet.private_c.id]
 
   tags = {
     "Name" = "${var.app}"
@@ -50,12 +50,12 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route_table_association" "private_d_subnet" {
-  subnet_id      = aws_subnet.private_d.id
+  subnet_id      = aws_subnet.private_b.id
   route_table_id = aws_route_table.private.id
 }
 
 resource "aws_route_table_association" "private_e_subnet" {
-  subnet_id      = aws_subnet.private_e.id
+  subnet_id      = aws_subnet.private_c.id
   route_table_id = aws_route_table.private.id
 }
 
@@ -100,7 +100,7 @@ resource "aws_vpc_endpoint" "dkr" {
     aws_security_group.egress_all.id,
     aws_security_group.nsg_task.id,
   ]
-  subnet_ids = [aws_subnet.private_d.id, aws_subnet.private_e.id]
+  subnet_ids = [aws_subnet.private_b.id, aws_subnet.private_c.id]
 
   tags = {
     Name        = "dkr-endpoint"
@@ -117,7 +117,7 @@ resource "aws_vpc_endpoint" "ecr-api" {
     aws_security_group.egress_all.id,
     aws_security_group.nsg_task.id,
   ]
-  subnet_ids = [aws_subnet.private_d.id, aws_subnet.private_e.id]
+  subnet_ids = [aws_subnet.private_b.id, aws_subnet.private_c.id]
 
   tags = {
     Name        = "ecr-api-endpoint"
@@ -134,7 +134,7 @@ resource "aws_vpc_endpoint" "logs" {
     aws_security_group.egress_all.id,
     aws_security_group.nsg_task.id,
   ]
-  subnet_ids = [aws_subnet.private_d.id, aws_subnet.private_e.id]
+  subnet_ids = [aws_subnet.private_b.id, aws_subnet.private_c.id]
 
   tags = {
     Name        = "logs-endpoint"

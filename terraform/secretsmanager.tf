@@ -113,7 +113,7 @@ data "aws_iam_policy_document" "kms_resource_policy_doc" {
 
 # create the secretsmanager secret
 resource "aws_secretsmanager_secret" "sm_secret" {
-  name       = "${var.app}-${var.environment}"
+  name       = "${var.app}-${var.environment}-1"
   kms_key_id = aws_kms_key.sm_kms_key.key_id
   tags       = var.tags
   policy     = data.aws_iam_policy_document.sm_resource_policy_doc.json
