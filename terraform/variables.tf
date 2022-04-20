@@ -44,6 +44,10 @@ variable "lb_protocol" {
   default = "TCP"
 }
 
+# Database URI secret
+variable "database_url" {
+}
+
 # Network configuration
 
 # The VPC to use for the Fargate cluster

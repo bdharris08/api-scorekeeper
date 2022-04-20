@@ -15,7 +15,7 @@ resource "aws_lb" "main" {
 
   # launch lbs in private subnets
   internal = false
-  subnets  = [aws_subnet.private_d.id, aws_subnet.private_e.id]
+  subnets  = [aws_subnet.private_b.id, aws_subnet.private_c.id]
   tags     = var.tags
 }
 
